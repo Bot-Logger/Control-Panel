@@ -95,25 +95,121 @@ const форма = document.getElementById('loginForm');
 const часОчікування = 2000; // 2 секунди затримки
 let останняВідправка = 0;
 
-форма.addEventListener('submit', function(подія) {
+форма.addEventListener('submit', async function(подія) {
     подія.preventDefault();
     
     const поточнийЧас = Date.now();
-    if (поточнийЧас - останняВідправка < часОчікування) return;
-    останняВідправка = поточнийЧас;
-    
+    if (поточнийЧас - останняВідправка < часОчікування) {
+        сповіщення.показати('Зачекайте перед наступною спробою', 'warning');
+        return;
+    }
+
     const кнопка = подія.target.querySelector('button');
     if (кнопка.disabled) return;
-    
+
     кнопка.disabled = true;
-    const початковийВміст = кнопка.innerHTML;
-    кнопка.innerHTML = '<span class="emoji">⌛</span> Зачекайте...';
+    кнопка.classList.add('loading');
     
-    setTimeout(() => {
+    try {
+        // Імітація відправки даних
+        await new Promise(resolve => setTimeout(resolve, часОчікування));
+        сповіщення.показати('Успішний вхід!', 'success');
+    } catch (помилка) {
+        сповіщення.показати('Помилка входу', 'error');
+    } finally {
         кнопка.disabled = false;
-        кнопка.innerHTML = початковийВміст;
-    }, часОчікування);
+        кнопка.classList.remove('loading');
+    }
 });
 
 // Завантаження сторінки
 document.addEventListener('DOMContentLoaded', отриматиIP);
+
+// Додаємо матричний фон
+function створитиМатрицю() {
+    const контейнер = document.createElement('div');
+    контейнер.className = 'matrix-background';
+    document.body.appendChild(контейнер);
+
+    for (let i = 0; i < 50; i++) {
+        const колонка = document.createElement('div');
+        колонка.className = 'matrix-column';
+        колонка.style.left = `${Math.random() * 100}%`;
+        колонка.style.animationDelay = `${Math.random() * 20}s`;
+        колонка.textContent = Array(Math.floor(Math.random() * 20) + 10)
+            .fill(0)
+            .map(() => String.fromCharCode(Math.random() * 128))
+            .join('');
+        контейнер.appendChild(колонка);
+    }
+}
+
+// Система сповіщень
+class Сповіщення {
+    constructor() {
+        this.контейнер = document.createElement('div');
+        this.контейнер.className = 'notifications';
+        document.body.appendChild(this.контейнер);
+    }
+
+    показати(повідомлення, тип = 'info') {
+        const сповіщення = document.createElement('div');
+        сповіщення.className = `notification ${тип}`;
+        сповіщення.textContent = повідомлення;
+        
+        this.контейнер.appendChild(сповіщення);
+        setTimeout(() => сповіщення.remove(), 3000);
+    }
+}
+
+const сповіщення = new Сповіщення();
+
+// Розширена валідація форми
+class ВалідаціяФорми {
+    constructor(форма) {
+        this.форма = форма;
+        this.правила = {
+            username: [
+                { pattern: /^[a-zA-Z0-9]{3,20}$/, message: 'Логін має містити від 3 до 20 символів' },
+                { pattern: /^[a-zA-Z]/, message: 'Логін має починатися з літери' }
+            ],
+            password: [
+                { pattern: /.{8,}/, message: 'Пароль має бути не менше 8 символів' },
+                { pattern: /[A-Z]/, message: 'Пароль має містити велику літеру' },
+                { pattern: /[0-9]/, message: 'Пароль має містити цифру' }
+            ]
+        };
+        
+        this.прослуховувачіПодій();
+    }
+
+    прослуховувачіПодій() {
+        this.форма.querySelectorAll('input').forEach(поле => {
+            поле.addEventListener('input', () => this.валідуватиПоле(поле));
+            поле.addEventListener('blur', () => this.валідуватиПоле(поле));
+        });
+    }
+
+    валідуватиПоле(поле) {
+        const правила = this.правила[поле.name];
+        if (!правила) return true;
+
+        let дійсний = true;
+        правила.forEach(правило => {
+            if (!правило.pattern.test(поле.value)) {
+                дійсний = false;
+                сповіщення.показати(правило.message, 'error');
+            }
+        });
+
+        поле.classList.toggle('valid', дійсний);
+        поле.classList.toggle('invalid', !дійсний);
+        return дійсний;
+    }
+}
+
+// Ініціалізація
+document.addEventListener('DOMContentLoaded', () => {
+    створитиМатрицю();
+    const валідатор = new ВалідаціяФорми(document.getElementById('loginForm'));
+});

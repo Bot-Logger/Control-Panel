@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://*.ipify.org https://*.db-ip.com https://*.ipapi.co https://*.seeip.org; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'">
+    <meta name="referrer" content="no-referrer">
+    <meta http-equiv="Permissions-Policy" content="interest-cohort=()">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <title>Панель управління</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="style.css" as="style">
+    <link rel="preload" href="script.js" as="script">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous">
+    <style>
+        * {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="logo">
+        <span class="blue">B</span><span class="white">ot<span class="highlight">L</span>ogger</span>
+    </div>
+    <div class="login-container">
+        <div class="login-box">
+            <h1 style="user-select: none;">Панель управлення</h1>
+            <form id="loginForm" autocomplete="off">
+                <div class="input-group">
+                    <label for="username"><span class="emoji">🧑‍💻</span> Логін:</label>
+                    <input type="text" id="username" name="username" placeholder="Введіть ваш логін" required>
+                </div>
+                <div class="input-group">
+                    <label for="password"><span class="emoji">🔐</span> Пароль:</label>
+                    <input type="password" id="password" name="password" placeholder="Введіть ваш пароль" required>
+                </div>
+                <div class="input-group">
+                    <label><span class="emoji">🖧</span> Ваш IP:</label>
+                    <div id="ipAddressDisplay" class="ip-field">Завантаження...</div>
+                </div>
+                <div class="input-group">
+                    <label style="text-align: center; width: 100%;"><span class="emoji">🖱️</span> Натисніть для входу</label>
+                </div>
+                <button type="submit">
+                    <span class="emoji">💻</span> Увійти
+                </button>
+            </form>
+        </div>
+    </div>
+    <script src="script.js" defer></script>
+</body>
+     
+</html>

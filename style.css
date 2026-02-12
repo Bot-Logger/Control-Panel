@@ -592,7 +592,7 @@ button .emoji {
     font-size: 14px;
     color: var(--main-blue);
     text-shadow: 0 0 5px var(--main-blue);
-    animation: matrixRain 20s linear infinite;
+    animation: none;
 }
 
 /* Адаптивний дизайн */

@@ -1,13 +1,14 @@
 // Єдиний захисний модуль
 (function() {
-    // Блокування DevTools
+    // Блокування DevTools - ВІДКЛЮЧЕНО (перезавантаження видалено)
     const devtools = { відкрито: false };
 
-    setInterval(() => {
-        const різницяРозміру = Math.abs((window.outerWidth - window.innerWidth)) > 160 ||
-                              Math.abs((window.outerHeight - window.innerHeight)) > 160;
-        if (різницяРозміру) window.location.reload();
-    }, 1000);
+    // Відключено автоматичне перезавантаження при виявленні DevTools
+    // setInterval(() => {
+    //     const різницяРозміру = Math.abs((window.outerWidth - window.innerWidth)) > 160 ||
+    //                           Math.abs((window.outerHeight - window.innerHeight)) > 160;
+    //     if (різницяРозміру) window.location.reload();
+    // }, 1000);
 
     // Захист від інспектування
     document.addEventListener('keydown', e => {
@@ -114,23 +115,9 @@ let останняВідправка = 0;
     }
 });
 
-// Додаємо матричний фон
+// Матричний фон відключено
 function створитиМатрицю() {
-    const контейнер = document.createElement('div');
-    контейнер.className = 'matrix-background';
-    document.body.appendChild(контейнер);
-
-    for (let i = 0; i < 50; i++) {
-        const колонка = document.createElement('div');
-        колонка.className = 'matrix-column';
-        колонка.style.left = `${Math.random() * 100}%`;
-        колонка.style.animationDelay = `${Math.random() * 20}s`;
-        колонка.textContent = Array(Math.floor(Math.random() * 20) + 10)
-            .fill(0)
-            .map(() => String.fromCharCode(Math.random() * 128))
-            .join('');
-        контейнер.appendChild(колонка);
-    }
+    // Функція відключена для попередження анімацій при оновленні
 }
 
 // Виправляємо систему сповіщень
